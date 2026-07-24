@@ -1,4 +1,4 @@
-var cacheName = '星辉高中物语-tokimeki5-';
+var cacheName = '星辉高中物语';
 
 /* Start the service worker and cache all of the app's content or use the existing one */
 self.addEventListener('install', function (e) {
