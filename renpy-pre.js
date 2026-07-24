@@ -326,7 +326,7 @@ Module.preRun = Module.preRun || [ ];
         if (dataDownloaded < dataSize || gameZipSize == 0) {
             if (!dataPrompt) {
                 printMessage("");
-                printMessage("Downloading engine...");
+                printMessage("正在加载引擎…（首次较慢，完成后自动缓存）");
                 dataPrompt = true;
             }
 
@@ -336,7 +336,7 @@ Module.preRun = Module.preRun || [ ];
 
         if (!gameZipPrompt) {
             printMessage("");
-            printMessage("Downloading game data...");
+            printMessage("正在加载游戏数据…");
             gameZipPrompt = true;
         }
 
@@ -364,7 +364,7 @@ Module.preRun = Module.preRun || [ ];
             let response = await fetch(window.gameZipURL);
 
             if (!response.ok) {
-                reportError("Could not load game.zip: " + response.status + " " + response.statusText);
+                reportError("游戏数据加载失败：" + response.status + " " + response.statusText);
             }
 
             gameZipSize = parseInt(response.headers.get('Content-Length'), 10);

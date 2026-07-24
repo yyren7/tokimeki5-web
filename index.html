@@ -1,10 +1,10 @@
-﻿<!doctype html>
-<html lang="en-us">
+<!doctype html>
+<html lang="zh-CN">
 
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>鏄熻緣楂樹腑鐗╄</title>
+  <title>星辉高中物语</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
   <link rel="icon" href="icons/icon-72x72.png" sizes="72x72" type="image/png" />
@@ -16,21 +16,15 @@
   <link rel="icon" href="icons/icon-384x384.png" sizes="384x384" type="image/png" />
   <link rel="icon" href="icons/icon-512x512.png" sizes="512x512" type="image/png" />
   <!-- ios support -->
-  <link rel="apple-touch-icon" href="icons/icon-72x72.png" sizes="72x72" type="image/png" />
-  <link rel="apple-touch-icon" href="icons/icon-96x96.png" sizes="96x96" type="image/png" />
-  <link rel="apple-touch-icon" href="icons/icon-128x128.png" sizes="128x128" type="image/png" />
-  <link rel="apple-touch-icon" href="icons/icon-144x144.png" sizes="144x144" type="image/png" />
-  <link rel="apple-touch-icon" href="icons/icon-152x152.png" sizes="152x152" type="image/png" />
   <link rel="apple-touch-icon" href="icons/icon-192x192.png" sizes="192x192" type="image/png" />
-  <link rel="apple-touch-icon" href="icons/icon-384x384.png" sizes="384x384" type="image/png" />
   <link rel="apple-touch-icon" href="icons/icon-512x512.png" sizes="512x512" type="image/png" />
 
-  <meta name="theme-color" content="#000" />
+  <meta name="theme-color" content="#2a3550" />
 
   <style>
     html {
-      background: #444;
-      font-family: sans-serif;
+      background: radial-gradient(ellipse at 50% 30%, #3d4c6f 0%, #2a3550 55%, #1c2438 100%);
+      font-family: "Source Han Serif SC", "Noto Serif SC", "SimSun", serif;
     }
 
     body, html {
@@ -49,7 +43,7 @@
     }
 
     #canvas {
-      background: #000;
+      background: #1c2438;
     }
 
     .visible {
@@ -64,107 +58,147 @@
       transition: visibility 0s .25s, opacity .25s linear;
     }
 
+    /* 加载状态条：底部居中的象牙金胶囊 */
     #statusDiv, #inputDiv {
-      background: rgba(0, 0, 0, 0.75);
-      width: 50%;
+      background: rgba(30, 38, 60, 0.88);
+      border: 1px solid #c9a45c;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 253, 246, 0.18);
+      width: 46%;
       margin: auto;
       min-width: 340px;
-      padding: 10px;
+      max-width: 640px;
+      padding: 12px 22px 14px;
 
       position: absolute;
-      top: 0;
+      bottom: 4vh;
       left: 0;
       right: 0;
 
-      border-radius: 0 0 5px 5px;
+      border-radius: 14px;
     }
 
     #statusTextDiv {
       overflow: auto;
-      max-height: 40vh;
-      color: #ccc;
-      font-size: 14px;
+      max-height: 34vh;
+      color: #f5ead0;
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      text-align: center;
+      line-height: 1.7;
     }
 
     #statusProgress {
       display: none;
       width: 100%;
+      height: 10px;
+      margin-top: 8px;
+      -webkit-appearance: none;
+      appearance: none;
+      border: 1px solid rgba(201, 164, 92, 0.65);
+      border-radius: 6px;
+      background: rgba(236, 226, 204, 0.18);
+      overflow: hidden;
+    }
+
+    #statusProgress::-webkit-progress-bar {
+      background: rgba(236, 226, 204, 0.14);
+    }
+
+    #statusProgress::-webkit-progress-value {
+      background: linear-gradient(180deg, #f2e3b6 0%, #c9a45c 45%, #a07c3c 100%);
+      border-radius: 5px;
+    }
+
+    #statusProgress::-moz-progress-bar {
+      background: linear-gradient(180deg, #f2e3b6 0%, #c9a45c 45%, #a07c3c 100%);
+      border-radius: 5px;
     }
 
     #inputDiv {
       width: 65%;
-      padding-left: 10px;
-      padding-right: 20px;
+      padding-left: 14px;
+      padding-right: 24px;
+      bottom: auto;
+      top: 30vh;
     }
 
     #inputPrompt {
-      color: #eee;
+      color: #f5ead0;
       font-size: 150%;
       margin-bottom: 1em;
       margin-top: 1em;
-
     }
 
     #inputText {
       width: 100%;
       font-size: 175%;
       padding: 5px;
-      background: inherit;
-      color: #eee;
+      background: rgba(250, 245, 233, 0.08);
+      border: 1px solid #c9a45c;
+      border-radius: 6px;
+      color: #fffdf6;
     }
 
     #inputText:focus {
       color: #ffffff;
+      outline: none;
+      box-shadow: 0 0 8px rgba(201, 164, 92, 0.6);
     }
 
+    /* 左上角折叠菜单 */
     #ContextContainer {
       position: absolute;
       left: 0px;
       top: 0px;
-      color: white;
+      color: #f5ead0;
     }
 
     #ContextContainer.shown {
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 0px 0px 5px 0px;
+      background: rgba(30, 38, 60, 0.82);
+      border: 1px solid rgba(201, 164, 92, 0.55);
+      border-top: none;
+      border-left: none;
+      border-radius: 0px 0px 10px 0px;
     }
 
     #ContextButton {
       text-decoration: none;
-      color: lightgrey;
+      color: #d8c9a4;
       font-size: xx-large;
       cursor: pointer;
       user-select: none;
       -moz-user-select: none;
       padding: 10px 10px;
-      opacity: .75;
+      opacity: .6;
     }
 
     #ContextButton:focus {
       outline: none;
-      color: #ffffff;
+      color: #fffdf6;
       opacity: 1.0;
     }
 
     #ContextMenu a {
       text-decoration: none;
-      color: lightgrey;
-      background: #444;
-      height: 48px;
-      width: 250px;
-      border-radius: 5px;
-      border: 1px solid lightgrey;
+      color: #f5ead0;
+      background: rgba(61, 76, 111, 0.9);
+      height: 44px;
+      width: 230px;
+      border-radius: 8px;
+      border: 1px solid #c9a45c;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 5px 5px;
+      margin: 6px 8px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
       opacity: 1.0;
     }
 
     #ContextMenu a:hover {
       text-decoration: none;
-      background: #666666;
-      color: #ffffff
+      background: linear-gradient(180deg, #f2e3b6 0%, #c9a45c 60%, #a07c3c 100%);
+      color: #33405e;
     }
 
     #presplash {
@@ -176,6 +210,7 @@
         width: 100%;
         height: 100%;
         object-fit: contain;
+        background: #1c2438;
     }
 
   </style>
@@ -193,9 +228,9 @@
     <div id="ContextMenu" style="display: none;">
       <input id="ID_SavegamesImport" type="file" onchange="onSavegamesImport(this)" accept="application/zip"
         style=display:none></input>
-      <a href="javascript:document.getElementById('ID_SavegamesImport').click();">Import Saves</a>
-      <a href="javascript:onSavegamesExport();">Export Saves</a>
-      <a href="javascript:FSDownload('/log.txt', 'text/plain');">Download Log</a>
+      <a href="javascript:document.getElementById('ID_SavegamesImport').click();">导入存档</a>
+      <a href="javascript:onSavegamesExport();">导出存档</a>
+      <a href="javascript:FSDownload('/log.txt', 'text/plain');">下载日志</a>
       <a href="https://www.renpy.org/" target="_blank">
           Powered by Ren'Py
       </a>
@@ -216,14 +251,13 @@
   </div>
 
   <script>
-      // The URL to game.zip, relative to the URL of this file.
+      // 数据包用 game.data 命名（规避 IDM 等下载器对 .zip 的拦截）
       window.gameZipURL = 'game.data';
 
-      // Register the service worker.
+      // 注册缓存优先的 service worker（web-skin/service-worker.js）：
+      // 首次访问后引擎与游戏数据全部落盘，之后打开秒进、可离线
       if (navigator.serviceWorker) {
-          if (!navigator.serviceWorker.controller) {
-              navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'all' });
-          }
+          navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'all' });
       }
   </script>
   <script src="renpy-pre.js"></script>
