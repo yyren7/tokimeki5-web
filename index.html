@@ -257,7 +257,9 @@
       // 注册缓存优先的 service worker（web-skin/service-worker.js）：
       // 首次访问后引擎与游戏数据全部落盘，之后打开秒进、可离线
       if (navigator.serviceWorker) {
-          navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'all' });
+          // updateViaCache:'none'：SW 脚本本身永远回源校验，发布新版后能及时接管
+          navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' })
+              .then(function (reg) { reg.update(); });
       }
   </script>
   <script src="renpy-pre.js"></script>
